@@ -1,5 +1,6 @@
+from typing import Tuple
 
-def CreateUserNote(raw_data_json):
+def create_user_note(raw_data_json: dict) -> Tuple[str]:
     """
     Objective:
     Create a user note based on the raw data JSON, specifying the range of years in the data.

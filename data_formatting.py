@@ -1,8 +1,9 @@
 import numpy as np
 import pandas as pd
+from typing import Tuple
 
 
-def ExtractMonthlyData(raw_data_json):
+def extract_monthly_data(raw_data_json: dict) -> Tuple[pd.DataFrame]:
     """
     Objective:
     Extract monthly solar energy generation data from the raw JSON data obtained from the API.
@@ -31,7 +32,7 @@ def ExtractMonthlyData(raw_data_json):
     return ave_gen_table_selected_coor
 
 
-def ConcatJRCnMaxRateAnalysis(max_rate_tb, ave_gen_table_selected_coor, lat, lon):
+def concat_jrc_n_max_rate_analysis(max_rate_tb: pd.DataFrame, ave_gen_table_selected_coor: pd.DataFrame, lat: float, lon: float) -> Tuple[pd.DataFrame]:
     """
     Objective:
     Concatenate the solar average generation data and the maximum rate data for the given latitude and longitude.
@@ -57,7 +58,7 @@ def ConcatJRCnMaxRateAnalysis(max_rate_tb, ave_gen_table_selected_coor, lat, lon
     return ave_gen_n_max_rate
 
 
-def MaxGenerationCapacityCalculation(ave_gen_n_max_rate):
+def max_generation_capacity_calculation(ave_gen_n_max_rate: pd.DataFrame) -> Tuple[pd.DataFrame]:
     """
     Objective:
     Calculate the maximum generation capacity for each month based on average generation and maximum rate data.

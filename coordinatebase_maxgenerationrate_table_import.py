@@ -1,8 +1,9 @@
 import numpy as np
 import pandas as pd
+from typing import Tuple
 
 
-def FillEmptyCoordinates(month_base_range_base_max_rate):
+def fill_empty_coordinates(month_base_range_base_max_rate: pd.DataFrame) -> Tuple[pd.DataFrame]:
     """
     Objective:
     Fill in empty coordinates in the DataFrame by creating all combinations of latitude and longitude.
@@ -16,7 +17,7 @@ def FillEmptyCoordinates(month_base_range_base_max_rate):
     """
 
     # Generate all combinations of latitude and longitude
-    lat_range = np.arange(36, 45)
+    lat_range = np.arange(35, 45)
     lon_range = np.arange(26, 48)
     combinations = pd.MultiIndex.from_product([lat_range, lon_range], names=['lat', 'lon'])
 
@@ -29,7 +30,7 @@ def FillEmptyCoordinates(month_base_range_base_max_rate):
 
     return month_base_range_base_max_rate_w_all_coor
 
-def CoorBaseMaxGenerationRateTableImport():
+def coordinate_base_max_generation_rate_table_import() -> Tuple[pd.DataFrame]:
     """
     Objective:
     Import the given dataset and perform data preparation by filling empty coordinates with default values.
@@ -97,7 +98,7 @@ def CoorBaseMaxGenerationRateTableImport():
     month_base_range_base_max_rate = pd.DataFrame(month_base_range_base_max_rate_lst, columns=columns)
 
     # Fill empty coordinates in the DataFrame with default values (1)
-    month_base_range_base_max_rate_w_all_coor = FillEmptyCoordinates(month_base_range_base_max_rate)
+    month_base_range_base_max_rate_w_all_coor = fill_empty_coordinates(month_base_range_base_max_rate)
 
     return month_base_range_base_max_rate_w_all_coor
 

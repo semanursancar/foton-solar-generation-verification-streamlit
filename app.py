@@ -1,33 +1,37 @@
 import streamlit as st
-import pandas as pd
-import altair as alt
 import plotly.graph_objects as go
 
 
-from functions import MonthlyAverageSolarGeneration
+from functions import monthly_solar_generation
 
+# Set page configuration
 st.set_page_config(layout="wide")
 
+# Main function to display the Streamlit app
 def main():
+    # CSS style to center-align the title
     st.markdown("""
     <style>
-    /* CSS style to center-align the title */
     .title {
         text-align: center;
     }
     </style>
     """, unsafe_allow_html=True)
 
+    # Title
     st.markdown("<h1 class='title'>Coordinate Based Monthly Solar Generation</h1>", unsafe_allow_html=True)
 
+    # Input fields for latitude, longitude, and peak power
     lat = st.number_input('Latitude:', min_value=0.0, max_value=90.0, value=37.019148, step=0.0001)
     lon = st.number_input('Longitude:', min_value=0.0, max_value=180.0, value=36.116237, step=0.0001)
     peak_power = st.number_input('Installed Power [kW]:', min_value=1.0, value=1000.0, step=1.0)
 
+    # Button to get average generation
     if st.button('Get Average Generation'):
-        try:           
-            table, user_note = MonthlyAverageSolarGeneration(lat, lon, peak_power)
-            
+        try:
+            # Call the function to fill empty coordinates
+            table, user_note = monthly_solar_generation(lat, lon, peak_power)
+
             # Custom CSS to center-align table headers
             custom_css = """
             <style>
@@ -48,7 +52,7 @@ def main():
             """
             st.write(custom_css, unsafe_allow_html=True)
 
-            # Split the screen into two columns for table and chart
+            # Split the screen into two columns for the table and chart
             col1, col2 = st.columns(2)
 
             # Render the table using HTML and CSS in the first column
@@ -60,13 +64,14 @@ def main():
             # Create the line chart using Streamlit's st.line_chart function in the second column
             with col2:
                 st.subheader('Solar Generation Chart')
-                # Create the combined bar chart using Plotly
                 fig = go.Figure()
 
+                # Add bar chart for average generation
                 fig.add_trace(
                     go.Bar(x=table['Months'], y=table['Average Generation [kWh]'], name='Average Generation [kWh]'),
                 )
 
+                # Add scatter plot for max. generation capacity
                 fig.add_trace(
                     go.Scatter(x=table['Months'], y=table['Max. Generation Capacity [kWh]'], name='Max. Generation Capacity [kWh]', mode='markers', marker=dict(color='red')),
                 )
@@ -90,7 +95,6 @@ def main():
     # Footer
     st.markdown("""
     <style>
-    /* CSS style for the footer */
     .footer {
         position: fixed;
         left: 0;
@@ -104,8 +108,8 @@ def main():
     </style>
     """, unsafe_allow_html=True)
 
-    st.markdown('<div class="footer">Made with 💚 by FOTON     |     Version: 0.0.6</div>', unsafe_allow_html=True)
+    st.markdown('<div class="footer">Made with 💚 by FOTON     |     Version: 0.0.7</div>', unsafe_allow_html=True)
 
-
+# Call the main function to run the Streamlit app
 if __name__ == '__main__':
     main()

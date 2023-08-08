@@ -1,5 +1,7 @@
 import streamlit as st
 import plotly.graph_objects as go
+import folium
+from streamlit_folium import folium_static
 
 
 from functions import monthly_solar_generation
@@ -61,6 +63,12 @@ def main():
                 st.write(table.to_html(index=False, escape=False), unsafe_allow_html=True)
                 st.write(user_note)
 
+                # Render the map below the table and chart
+                st.subheader('Solar Generation Location')
+                m = folium.Map(location=[lat, lon], zoom_start=5, width='95%')
+                folium.Marker([lat, lon]).add_to(m)
+                folium_static(m)
+
             # Create the line chart using Streamlit's st.line_chart function in the second column
             with col2:
                 st.subheader('Solar Generation Chart')
@@ -88,6 +96,31 @@ def main():
                 )
 
                 st.plotly_chart(fig, use_container_width=True)
+                ###########
+                ###########
+                ###########
+                st.subheader('Coordinate Base Maximum Rate')
+                fig = go.Figure()
+
+                # Add bar chart for average generation
+                fig.add_trace(
+                    go.Scatter(x=table['Months'], y=table['Coordinate Base Maximum Rate'], name='Coordinate Base Maximum Rate', mode='markers', marker=dict(size=12, color='lime', symbol='star'), line=dict(width=3, color='lightgray')),
+                )
+
+                y_max = max(table['Coordinate Base Maximum Rate'])  # Find the maximum value in the table
+                y_min = min(table['Coordinate Base Maximum Rate'])  # Find the maximum value in the table
+                y_axis_up_margin = y_max * 0.1  # Add a 10% margin to the y-axis
+                y_axis_down_margin = y_min * 0.1 
+
+                fig.update_layout(
+                    xaxis_title='Months',
+                    yaxis=dict(title='Rate [%]', range=[y_min - y_axis_down_margin, y_max + y_axis_up_margin]),
+                    legend=dict(orientation='h', x=0, y=-0.2),  # Move legend to the bottom with horizontal orientation
+                    height=570,
+                    xaxis=dict(tickmode='linear', dtick=1)
+                )
+
+                st.plotly_chart(fig, use_container_width=True)
 
         except Exception as e:
             st.error(f"An error occurred: {str(e)}")
@@ -108,7 +141,7 @@ def main():
     </style>
     """, unsafe_allow_html=True)
 
-    st.markdown('<div class="footer">Made with 💚 by FOTON     |     Version: 0.0.7</div>', unsafe_allow_html=True)
+    st.markdown('<div class="footer">Made with 💚 by FOTON     |     Version: 0.0.8</div>', unsafe_allow_html=True)
 
 # Call the main function to run the Streamlit app
 if __name__ == '__main__':

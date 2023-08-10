@@ -3,8 +3,7 @@ import pandas as pd
 
 import data_formatting
 import user_note
-from coordinatebase_maxgenerationrate_table_import import \
-    coordinate_base_max_generation_rate_table_import
+import coordinatebase_maxgenerationrate_table_import
 from jrc_api_connection import get_solar_average_data_from_jrc
 
 
@@ -31,7 +30,10 @@ def monthly_solar_generation(lat: float, lon: float, peakpower: float)  -> Tuple
     ave_gen_table_selected_coor = data_formatting.extract_monthly_data(raw_data_json)
 
     # Import the table containing base maximum generation rate data for different coordinates
-    max_rate_tb = coordinate_base_max_generation_rate_table_import()
+    max_rate_tb_ftn = coordinatebase_maxgenerationrate_table_import.coordinate_base_max_generation_rate_table_import()
+
+    # Fill empty coordinates in the DataFrame with default values (1)
+    max_rate_tb = coordinatebase_maxgenerationrate_table_import.fill_empty_coordinates(max_rate_tb_ftn)
 
     # Concatenate the average generation data and maximum rate data for the selected coordinate
     ave_gen_n_max_rate = data_formatting.concat_jrc_n_max_rate_analysis(

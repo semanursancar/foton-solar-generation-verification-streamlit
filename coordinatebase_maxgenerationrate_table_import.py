@@ -97,9 +97,6 @@ def coordinate_base_max_generation_rate_table_import() -> Tuple[pd.DataFrame]:
     # Create a DataFrame from the dataset
     month_base_range_base_max_rate = pd.DataFrame(month_base_range_base_max_rate_lst, columns=columns)
 
-    # Fill empty coordinates in the DataFrame with default values (1)
-    month_base_range_base_max_rate_w_all_coor = fill_empty_coordinates(month_base_range_base_max_rate)
-
-    return month_base_range_base_max_rate_w_all_coor
+    return month_base_range_base_max_rate
 
 

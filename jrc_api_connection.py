@@ -3,7 +3,7 @@ import requests
 from typing import Tuple
 
 
-def get_solar_average_data_from_jrc(lat: float, lon: float, peakpower: float):
+def get_solar_average_data_from_jrc(lat: float, lon: float, peakpower: float) -> Tuple[dict]:
     """
     Objective:
     Retrieve solar average data from the Joint Research Centre (JRC) API based on the provided latitude, longitude, and peak power.

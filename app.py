@@ -24,8 +24,8 @@ def main():
     st.markdown("<h1 class='title'>Coordinate Based Monthly Solar Generation</h1>", unsafe_allow_html=True)
 
     # Input fields for latitude, longitude, and peak power
-    lat = st.number_input('Latitude:', min_value=0.0, max_value=90.0, value=37.019148, step=0.0001)
-    lon = st.number_input('Longitude:', min_value=0.0, max_value=180.0, value=36.116237, step=0.0001)
+    lat = st.number_input('Latitude:', min_value=0.0, max_value=90.0, value=37.019148, step=0.00000001, format="%.8f")
+    lon = st.number_input('Longitude:', min_value=0.0, max_value=180.0, value=36.116237, step=0.00000001, format="%.8f")
     peak_power = st.number_input('Installed Power [kW]:', min_value=1.0, value=1000.0, step=1.0)
 
     # Button to get average generation
@@ -99,16 +99,16 @@ def main():
                 ###########
                 ###########
                 ###########
-                st.subheader('Coordinate Base Maximum Rate')
+                st.subheader('Cluster Base Maximum Rate')
                 fig = go.Figure()
 
                 # Add bar chart for average generation
                 fig.add_trace(
-                    go.Scatter(x=table['Months'], y=table['Coordinate Base Maximum Rate'], name='Coordinate Base Maximum Rate', mode='markers', marker=dict(size=12, color='lime', symbol='star'), line=dict(width=3, color='lightgray')),
+                    go.Scatter(x=table['Months'], y=table['Cluster Base Maximum Rate'], name='Cluster Base Maximum Rate', mode='markers', marker=dict(size=12, color='lime', symbol='star'), line=dict(width=3, color='lightgray')),
                 )
 
-                y_max = max(table['Coordinate Base Maximum Rate'])  # Find the maximum value in the table
-                y_min = min(table['Coordinate Base Maximum Rate'])  # Find the maximum value in the table
+                y_max = max(table['Cluster Base Maximum Rate'])  # Find the maximum value in the table
+                y_min = min(table['Cluster Base Maximum Rate'])  # Find the maximum value in the table
                 y_axis_up_margin = y_max * 0.1  # Add a 10% margin to the y-axis
                 y_axis_down_margin = y_min * 0.1 
 
@@ -141,7 +141,7 @@ def main():
     </style>
     """, unsafe_allow_html=True)
 
-    st.markdown('<div class="footer">Made with 💚 by FOTON     |     Version: 0.0.8</div>', unsafe_allow_html=True)
+    st.markdown('<div class="footer">Made with 💚 by FOTON     |     Version: 0.0.10</div>', unsafe_allow_html=True)
 
 # Call the main function to run the Streamlit app
 if __name__ == '__main__':

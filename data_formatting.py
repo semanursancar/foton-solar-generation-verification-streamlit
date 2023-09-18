@@ -1,4 +1,3 @@
-import numpy as np
 import pandas as pd
 from typing import Tuple
 
@@ -32,7 +31,7 @@ def extract_monthly_data(raw_data_json: dict) -> Tuple[pd.DataFrame]:
     return ave_gen_table_selected_coor
 
 
-def concat_jrc_n_max_rate_analysis(max_rate_tb: pd.DataFrame, ave_gen_table_selected_coor: pd.DataFrame, lat: float, lon: float) -> Tuple[pd.DataFrame]:
+def concat_jrc_n_max_rate_analysis(max_rate_tb: pd.DataFrame, ave_gen_table_selected_coor: pd.DataFrame, cluster: int) -> Tuple[pd.DataFrame]:
     """
     Objective:
     Concatenate the solar average generation data and the maximum rate data for the given latitude and longitude.
@@ -48,12 +47,12 @@ def concat_jrc_n_max_rate_analysis(max_rate_tb: pd.DataFrame, ave_gen_table_sele
     """
 
     # Extract the maximum rate data for the specified latitude and longitude
-    max_rate_coor_base = max_rate_tb[(max_rate_tb['lat'] == np.floor(lat)) & (max_rate_tb['lon'] == np.floor(lon))].iloc[0, 2:]
-    max_rate_coor_base.name = 'Coordinate Base Maximum Rate'
-    max_rate_coor_base.reset_index(drop=True, inplace=True)
+    max_rate_cluster_base = max_rate_tb[(max_rate_tb['kmeans_labels'] == cluster) ].iloc[0, 1:]
+    max_rate_cluster_base.name = 'Cluster Base Maximum Rate'
+    max_rate_cluster_base.reset_index(drop=True, inplace=True)
 
     # Concatenate average generation data and maximum rate data for the selected coordinate
-    ave_gen_n_max_rate = pd.concat([ave_gen_table_selected_coor, max_rate_coor_base], axis=1)
+    ave_gen_n_max_rate = pd.concat([ave_gen_table_selected_coor, max_rate_cluster_base], axis=1)
 
     return ave_gen_n_max_rate
 
@@ -74,6 +73,6 @@ def max_generation_capacity_calculation(ave_gen_n_max_rate: pd.DataFrame) -> Tup
     table = ave_gen_n_max_rate.copy()
 
     # Calculate the maximum generation capacity for each month based on the provided formula
-    table["Max. Generation Capacity [kWh]"] = (table["Standard Dev."] + table["Average Generation [kWh]"]) * table["Coordinate Base Maximum Rate"]
+    table["Max. Generation Capacity [kWh]"] = (table["Standard Dev."] + table["Average Generation [kWh]"]) * table["Cluster Base Maximum Rate"]
 
     return table

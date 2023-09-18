@@ -32,10 +32,18 @@ def monthly_solar_generation(lat: float, lon: float, peakpower: float)  -> Tuple
     # Get raw solar energy generation data from the JRC API
     raw_data_json = get_solar_average_data_from_jrc(lat, lon, peakpower)
 
+    # Get raw solar energy generation data from the JRC API
+    raw_data_json_100 = get_solar_average_data_from_jrc(lat, lon, 100)
+
+
     # Extract and format monthly average solar generation data
     ave_gen_table_selected_coor = data_formatting.extract_monthly_data(raw_data_json)
+
+    # Extract and format monthly average solar generation data
+    ave_gen_table_selected_coor_100 = data_formatting.extract_monthly_data(raw_data_json_100)
+
     
-    cluster = clustering.kmeans_clustering(ave_gen_table_selected_coor)
+    cluster = clustering.kmeans_clustering(ave_gen_table_selected_coor_100)
 
     # Import the table containing base maximum generation rate data for different coordinates
     max_rate_tb = clusterbase_maxgenerationrate_table_import.cluster_base_max_generation_rate_table_import()
